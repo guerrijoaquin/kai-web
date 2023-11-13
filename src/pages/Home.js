@@ -52,7 +52,7 @@ export function Home() {
         <DatePicker
           sx={{ m: 1 }}
           label="Fecha"
-          onAccept={handleDateChanged}
+          onChange={handleDateChanged}
           value={savedDate}
           format="DD/MM/YYYY"
         />

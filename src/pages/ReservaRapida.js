@@ -66,7 +66,7 @@ function getStyles(cochera, cocheras, theme) {
 
 const initData = {
   pago: {
-    fecha: moment().format("DD/MM/YYYY"),
+    fecha: moment().format("YYYY-MM-DD"),
     cantidad: null,
     metodo: null,
   },
@@ -804,9 +804,9 @@ export function ReservaRapida() {
                     aria-label="Borrar pago"
                     color="error"
                     onClick={() => {
-                      setPagos((old) => ({
-                        pagos: old.filter((x, index) => index !== i),
-                      }));
+                      setPagos((old) => [
+                        ...old.filter((x, index) => index !== i),
+                      ]);
                     }}
                   >
                     <DeleteRounded />
@@ -849,7 +849,7 @@ export function ReservaRapida() {
                   onAccept={(date) =>
                     setPagoActual((old) => ({
                       ...old,
-                      fecha: date.format("DD/MM/YYYY"),
+                      fecha: date.format("YYYY-MM-DD"),
                     }))
                   }
                   defaultValue={moment()}
@@ -892,7 +892,7 @@ export function ReservaRapida() {
                 <Button
                   variant="contained"
                   onClick={() => {
-                    const { cantidad, metodo, fecha } = pagoActual;
+                    let { cantidad, metodo, fecha } = pagoActual;
 
                     if (
                       !metodo ||
@@ -985,7 +985,7 @@ export function ReservaRapida() {
                 onClick={handleSaveReserva}
                 disabled={!guardable}
               >
-                GUARDAR CAMBIOS
+                CONFIRMAR
               </Button>
             </>
           )}

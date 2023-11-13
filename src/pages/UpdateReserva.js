@@ -66,7 +66,7 @@ function getStyles(cochera, cocheras, theme) {
 
 const initData = {
   pago: {
-    fecha: moment().format("DD/MM/YYYY"),
+    fecha: moment().format("YYYY-MM-DD"),
     cantidad: null,
     metodo: null,
   },

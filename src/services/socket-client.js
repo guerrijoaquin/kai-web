@@ -1,13 +1,15 @@
 import { toast } from "react-toastify";
 import { Manager } from "socket.io-client";
+import { VARIABLES } from "../ENV";
 
 export class SocketClient {
   socket;
   refreshData;
-  constructor(setConnecting, user_id, navigate) {
+  constructor(setConnecting, user_id, authToken, navigate) {
     this.setConnecting = setConnecting;
     this.user_id = user_id;
     this.navigate = navigate;
+    this.authToken = authToken;
     this.connectToServer();
   }
 
@@ -16,10 +18,13 @@ export class SocketClient {
   }
 
   connectToServer() {
-    const manager = new Manager("ws://localhost:5000/", {
+    const manager = new Manager(VARIABLES.API_URL, {
       extraHeaders: {
         user_id: this.user_id,
+        "ngrok-skip-browser-warning": true,
+        token: this.authToken,
       },
+      transports: ["polling"],
     });
 
     this.setConnecting("connecting");
