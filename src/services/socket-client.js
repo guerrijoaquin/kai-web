@@ -71,7 +71,7 @@ export class SocketClient {
   disconnect() {
     this.socket.close();
     this.setConnecting("logout");
-    this.setSocket(null);
+    this.socket = null;
   }
 
   async handleResponse(response, resolve, reject) {
