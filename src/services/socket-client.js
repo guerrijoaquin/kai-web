@@ -19,6 +19,7 @@ export class SocketClient {
 
   connectToServer() {
     const api = process.env.API_URL || VARIABLES.API_URL;
+    console.log("process env", process.env.API_URL);
     const manager = new Manager(api, {
       extraHeaders: {
         user_id: this.user_id,
