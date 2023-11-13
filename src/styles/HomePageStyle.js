@@ -1,13 +1,14 @@
 export const HomePageStyle = {
   container: {
     width: "100%",
-    minHeight: "100vh",
     display: "flex",
     flexDirection: "column",
+    justifyContent: "center",
   },
   header: {
     display: "flex",
     width: "100%",
+    flexWrap: "wrap",
     justifyContent: "space-between",
     background: "#f5f2e9",
   },
@@ -27,6 +28,7 @@ export const HomePageStyle = {
     height: "100%",
     justifyContent: "center",
     alignItems: "center",
+    flexDirection: "column",
   },
   reservasList: {
     display: "flex",

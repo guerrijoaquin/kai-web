@@ -1,12 +1,14 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import { Login } from "./components/Login";
-import { Home } from "./components/Home";
-import { ProtectedRoute } from "./components/ProtectedRoute";
+import { Login } from "./pages/Login";
+import { Home } from "./pages/Home";
+import { ProtectedRoute } from "./pages/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
 import { GeneralProvider } from "./context/GeneralContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { ReservaRapida } from "./pages/ReservaRapida";
+import { UpdateReserva } from "./pages/UpdateReserva";
 
 function App() {
   return (
@@ -27,6 +29,22 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Home />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/reservaRapida"
+              element={
+                <ProtectedRoute>
+                  <ReservaRapida />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/updateReserva"
+              element={
+                <ProtectedRoute>
+                  <UpdateReserva />
                 </ProtectedRoute>
               }
             />

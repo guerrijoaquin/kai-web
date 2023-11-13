@@ -11,7 +11,7 @@ export const useGeneralContext = () => {
 export function GeneralProvider({ children }) {
   const [loading, setLoading] = useState(false);
   const [connecting, setConnecting] = useState(null);
-  const [socket, setSocket] = useState(null);
+  const [socketClient, setSocketClient] = useState(null);
 
   useEffect(() => {
     toast.dismiss();
@@ -46,8 +46,8 @@ export function GeneralProvider({ children }) {
         setLoading,
         connecting,
         setConnecting,
-        socket,
-        setSocket,
+        socketClient,
+        setSocketClient,
       }}
     >
       {children}

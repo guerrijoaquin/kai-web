@@ -1,9 +1,7 @@
-import { useAuth } from "../context/AuthContext";
-import { connectToServer, disconnect } from "../services/socket-client";
 import { useGeneralContext } from "../context/GeneralContext";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { HomePageStyle } from "../styles/HomePageStyle";
-import { FiLogOut } from "react-icons/fi";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import {
@@ -14,65 +12,48 @@ import {
   ListItemIcon,
   ListItemText,
   Divider,
+  IconButton,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import moment from "moment";
 import SombrillaIcon from "@mui/icons-material/BeachAccessTwoTone";
 import CarpaIcon from "@mui/icons-material/HomeTwoTone";
 import { toast } from "react-toastify";
+import { ReservaRapidaStyle } from "../styles/ReservaRapidaStyle";
+import { EditRounded } from "@mui/icons-material";
 
 export function Home() {
-  const { logout, user } = useAuth();
-  const [date, setDate] = useState(new moment());
-  const { setConnecting, socket, setSocket, connecting } = useGeneralContext();
+  const [savedDate, setSavedDate] = useState(new moment());
+  const { socketClient } = useGeneralContext();
   const [reservas, setReservas] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (!socket && connecting !== "logout")
-      connectToServer(setConnecting, setSocket, user.uid);
-    else if (socket) handleDateChanged(date);
-  }, [socket, setConnecting, setSocket, user.uid]);
+    handleDateChanged(savedDate);
+    socketClient.refreshData = handleDateChanged;
+  }, []);
 
-  const handleLogout = async () => {
-    try {
-      await disconnect(socket, setSocket, setConnecting);
-      await logout();
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
+  const handleDateChanged = async (date) => {
+    if (!date) date = savedDate;
+    else setSavedDate(date);
 
-  const handleDateChanged = (date) => {
-    setDate(date);
     const dateString = date.format("YYYY-MM-DD");
 
-    socket.timeout(3000).emit("get-reservas", dateString, (err, response) => {
-      console.log(response);
-      err && console.error(err);
-      if (err) return toast("Ocurrió un error :/", { type: "error" });
-      else setReservas(response);
-    });
+    const response = await socketClient.getReservas(dateString);
+
+    setReservas(response);
   };
 
-  const handleAddReserva = () => {};
+  const handleAddReserva = () => navigate("/reservaRapida");
 
   return (
     <LocalizationProvider dateAdapter={AdapterMoment}>
       <div style={HomePageStyle.container}>
-        <div style={HomePageStyle.header}>
-          <p style={HomePageStyle.email}>{user.email}</p>
-          <button
-            className="bg-slate-200 hover:bg-slate-300 rounded py-2 px-4 text-black flex items-center"
-            onClick={handleLogout}
-          >
-            <FiLogOut className="w-6 h-6 mr-2" /> SALIR
-          </button>
-        </div>
         <DatePicker
           sx={{ m: 1 }}
           label="Fecha"
           onAccept={handleDateChanged}
-          value={date}
+          value={savedDate}
           format="DD/MM/YYYY"
         />
         {!reservas ? (
@@ -85,9 +66,12 @@ export function Home() {
               {reservas?.length === 0 ? (
                 <p style={{ padding: "10px" }}>No hay reservas en esta fecha</p>
               ) : (
-                <>
+                <List>
                   {reservas.map((reserva) => (
-                    <List key={reserva.idReserva}>
+                    <div
+                      key={reserva.idReserva}
+                      style={ReservaRapidaStyle.textField}
+                    >
                       <ListItem>
                         <ListItemIcon>
                           {reserva.recurso.carpa ? (
@@ -99,11 +83,24 @@ export function Home() {
                         <ListItemText
                           primary={`${reserva.recurso.nombreTipoRecurso} ${reserva.recurso.idRecurso}`}
                         />
+                        <IconButton
+                          aria-label="Editar reserva"
+                          onClick={() => {
+                            navigate(
+                              `/updateReserva?reservaId=${reserva.idReserva}`,
+                              {
+                                state: { reservaId: reserva.idReserva },
+                              }
+                            );
+                          }}
+                        >
+                          <EditRounded />
+                        </IconButton>
                       </ListItem>
                       <Divider />
-                    </List>
+                    </div>
                   ))}
-                </>
+                </List>
               )}
             </>
             <Fab
