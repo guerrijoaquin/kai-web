@@ -18,7 +18,8 @@ export class SocketClient {
   }
 
   connectToServer() {
-    const manager = new Manager(VARIABLES.API_URL, {
+    const api = process.env.API_URL || VARIABLES.API_URL;
+    const manager = new Manager(api, {
       extraHeaders: {
         user_id: this.user_id,
         "ngrok-skip-browser-warning": true,
