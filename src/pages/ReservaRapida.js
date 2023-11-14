@@ -600,11 +600,13 @@ export function ReservaRapida() {
                     value={idRecurso || ""}
                     onChange={({ target: { value } }) => setIdRecurso(value)}
                   >
-                    {data.idRecursosDisponibles.map((id) => (
-                      <MenuItem value={id} key={id}>
-                        {id}
-                      </MenuItem>
-                    ))}
+                    {data.idRecursosDisponibles
+                      .sort((a, b) => a - b)
+                      .map((id) => (
+                        <MenuItem value={id} key={id}>
+                          {id}
+                        </MenuItem>
+                      ))}
                   </Select>
                 </FormControl>
                 <TextField
