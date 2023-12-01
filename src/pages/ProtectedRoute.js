@@ -24,11 +24,9 @@ export function ProtectedRoute({ children }) {
   };
 
   useEffect(() => {
-    if (user && !socketClient && connecting !== "logout" && user?.accessToken) {
+    if (user && !socketClient && connecting !== "logout") {
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      setSocketClient(
-        new SocketClient(setConnecting, user.uid, user.accessToken, navigate)
-      );
+      setSocketClient(new SocketClient(setConnecting, user.token, navigate));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socketClient, setConnecting, setSocketClient, user]);

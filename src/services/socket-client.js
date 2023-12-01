@@ -5,9 +5,8 @@ import { VARIABLES } from "../ENV";
 export class SocketClient {
   socket;
   refreshData;
-  constructor(setConnecting, user_id, authToken, navigate) {
+  constructor(setConnecting, authToken, navigate) {
     this.setConnecting = setConnecting;
-    this.user_id = user_id;
     this.navigate = navigate;
     this.authToken = authToken;
     this.connectToServer();
@@ -18,9 +17,7 @@ export class SocketClient {
   }
 
   connectToServer() {
-    const api = process.env.API_URL || VARIABLES.API_URL;
-    console.log("process env", process.env.API_URL);
-    const manager = new Manager(api, {
+    const manager = new Manager(VARIABLES.API_URL, {
       extraHeaders: {
         user_id: this.user_id,
         "ngrok-skip-browser-warning": true,
