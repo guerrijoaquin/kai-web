@@ -23,7 +23,7 @@ export class SocketClient {
         "ngrok-skip-browser-warning": true,
         token: this.authToken,
       },
-      transports: ["polling"],
+      transports: ["polling", "websocket"],
     });
 
     this.setConnecting("connecting");
