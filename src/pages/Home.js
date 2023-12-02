@@ -18,7 +18,6 @@ import AddIcon from "@mui/icons-material/Add";
 import moment from "moment";
 import SombrillaIcon from "@mui/icons-material/BeachAccessTwoTone";
 import CarpaIcon from "@mui/icons-material/HomeTwoTone";
-import { toast } from "react-toastify";
 import { ReservaRapidaStyle } from "../styles/ReservaRapidaStyle";
 import { EditRounded } from "@mui/icons-material";
 
